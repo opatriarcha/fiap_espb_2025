@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TaskRepository  extends JpaRepository<Task, Long>{
     public List<Task> findAllByOrderByDueDateAsc();
     public List<Task> findByStatusOrderByDueDate(Task.TaskStatus status);
-
+    
 }
