@@ -5,7 +5,7 @@ import br.com.fiap.espb.es.ddd.taskManager.dto.TaskDTO;
 
 public class TaskMapper {
 
-    public static TaskDTO toDTO(Task task) {
+    public TaskDTO toDTO(Task task) {
         if (task == null) {
             return null;
         }
@@ -22,7 +22,7 @@ public class TaskMapper {
         );
     }
 
-    public static Task toEntity(TaskDTO dto) {
+    public Task toEntity(TaskDTO dto) {
         if (dto == null) {
             return null;
         }
