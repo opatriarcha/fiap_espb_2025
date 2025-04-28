@@ -44,6 +44,9 @@ public class Task {
     @Column(nullable = false, name = "COMPLETION_DATE")
     private @Getter @Setter LocalDate completionDate;
     
+    @Column(nullable = false, name = "DUE_DATE")
+    private @Getter @Setter LocalDate dueDate;
+    
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Status cannot be null.")
     @Column(nullable = false, name = "STATUS")
