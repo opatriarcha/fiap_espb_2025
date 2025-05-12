@@ -2,6 +2,7 @@ package br.com.fiap.espb.es.ddd.taskManager.service;
 
 import br.com.fiap.espb.es.ddd.taskManager.datasource.repository.TaskRepository;
 import br.com.fiap.espb.es.ddd.taskManager.domainmodel.Task;
+import br.com.fiap.espb.es.ddd.taskManager.domainmodel.TaskStatus;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findByStatusOrderByDueDate(Task.TaskStatus status) {
+    public List<Task> findByStatusOrderByDueDate(TaskStatus status) {
         return taskRepository.findByStatusOrderByDueDate(status);
     }
 

@@ -1,7 +1,7 @@
 package br.com.fiap.espb.es.ddd.taskManager.dto;
 
-import br.com.fiap.espb.es.ddd.taskManager.domainmodel.Task.TaskPriority;
-import br.com.fiap.espb.es.ddd.taskManager.domainmodel.Task.TaskStatus;
+import br.com.fiap.espb.es.ddd.taskManager.domainmodel.TaskPriority;
+import br.com.fiap.espb.es.ddd.taskManager.domainmodel.TaskStatus;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -9,7 +9,7 @@ public class TaskDTO {
 
     private Long id;
     private String title;
-    private String description;
+    private String descriptionnnnnnnnnnnnnnn;
     private LocalDate creationDate;
     private LocalDate completionDate;
     private LocalDate dueDate;
@@ -20,7 +20,7 @@ public class TaskDTO {
     public TaskDTO(Long id, String title, String description, LocalDate creationDate, LocalDate completionDate, LocalDate dueDate, String inutil, TaskStatus status, TaskPriority priority) {
         this.id = id;
         this.title = title;
-        this.description = description;
+        this.descriptionnnnnnnnnnnnnnn = description;
         this.creationDate = creationDate;
         this.completionDate = completionDate;
         this.dueDate = dueDate;
@@ -35,7 +35,7 @@ public class TaskDTO {
     public TaskDTO(Long id, String title, String description, LocalDate creationDate, LocalDate completionDate, LocalDate dueDate, TaskStatus status, TaskPriority priority) {
         this.id = id;
         this.title = title;
-        this.description = description;
+        this.descriptionnnnnnnnnnnnnnn = description;
         this.creationDate = creationDate;
         this.completionDate = completionDate;
         this.dueDate = dueDate;
@@ -60,11 +60,11 @@ public class TaskDTO {
     }
 
     public String getDescription() {
-        return description;
+        return descriptionnnnnnnnnnnnnnn;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.descriptionnnnnnnnnnnnnnn = description;
     }
 
     public LocalDate getCreationDate() {
@@ -136,7 +136,4 @@ public class TaskDTO {
         final TaskDTO other = (TaskDTO) obj;
         return Objects.equals(this.id, other.id);
     }
-    
-    
-    
 }

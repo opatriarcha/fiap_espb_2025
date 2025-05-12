@@ -14,6 +14,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name="TASKS")
 public class Task {
     
@@ -39,13 +41,13 @@ public class Task {
     private @Getter @Setter String description;
     
     @NotNull(message="Creation Date cannot be null")
-    @Column(nullable = false, name = "CREATION_DATE")
+    @Column(nullable = true, name = "CREATION_DATE", insertable = true, unique = false)
     private @Getter @Setter LocalDate creationDate;
     
-    @Column(nullable = false, name = "COMPLETION_DATE")
+    @Column(nullable = true, name = "COMPLETION_DATE")
     private @Getter @Setter LocalDate completionDate;
     
-    @Column(nullable = false, name = "DUE_DATE")
+    @Column(nullable = true, name = "DUE_DATE")
     private @Getter @Setter LocalDate dueDate;
     
     @Column(nullable = true, name = "INUTIL")
@@ -54,40 +56,13 @@ public class Task {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Status cannot be null.")
     @Column(nullable = false, name = "STATUS")
-    private @Getter @Setter TaskStatus status;
+    private @Getter @Setter TaskStatus status;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
     
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Priority cannot be null.")
     @Column(nullable = false, name = "PRIORITY")
     private @Getter @Setter TaskPriority priority; 
     
-    
-    public enum TaskStatus {
-        PENDING, IN_PROGRESS, COMPLETED
-    }
-    
-    public enum TaskPriority{
-        LOW(1), MEDIUM(3), HIGH(5);
-        
-        private final int value;
-        
-        TaskPriority( int value){
-            this.value = value;
-        }
-        
-        public int getValue(){
-            return this.value;
-        }
-        
-        public static TaskPriority fromValue( int value ){
-            for( TaskPriority priority : TaskPriority.values()){
-                if( priority.getValue() == value )
-                    return priority;
-            }
-            throw new IllegalArgumentException("Invalid priority value: " + value);
-        }
-    }
-
     public Long getId() {
         return id;
     }

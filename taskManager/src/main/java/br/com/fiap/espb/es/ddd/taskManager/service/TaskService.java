@@ -1,6 +1,7 @@
 package br.com.fiap.espb.es.ddd.taskManager.service;
 
 import br.com.fiap.espb.es.ddd.taskManager.domainmodel.Task;
+import br.com.fiap.espb.es.ddd.taskManager.domainmodel.TaskStatus;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ public interface TaskService {
     public Page<Task> findAll(Pageable pageable);
     public List<Task> findAllByOrderByDueDateAsc();
     public Optional<Task> findById(Long id);
-    public List<Task> findByStatusOrderByDueDate(Task.TaskStatus status);
+    public List<Task> findByStatusOrderByDueDate(TaskStatus status);
     public <S extends Task> S save(S entity);
     
 }
