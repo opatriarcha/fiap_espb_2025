@@ -1,70 +1,65 @@
 package br.com.fiap.espb.es.ddd.taskManager.controllers;
 
-import br.com.fiap.espb.es.ddd.taskManager.domainmodel.*;
+import br.com.fiap.espb.es.ddd.taskManager.dto.TaskDTO;
+import br.com.fiap.espb.es.ddd.taskManager.domainmodel.Task;
 import br.com.fiap.espb.es.ddd.taskManager.service.TaskService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import br.com.fiap.espb.es.ddd.taskManager.mapper.TaskMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
 @RequestMapping("/tasks")
-//@RequiredArgsConstructor
 public class TaskController {
 
-    private final TaskService taskService;
+    @Autowired
+    private TaskService taskService;
 
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
-    
+    private final TaskMapper taskMapper = new TaskMapper();
 
     @GetMapping
-    public String listTasks(Model model) {
-        model.addAttribute("tasks", taskService.findAllByOrderByDueDateAsc());
-        return "tasks/list";
+    public ResponseEntity<List<TaskDTO>> getAllTasks() {
+        List<Task> tasks = taskService.findAll();
+        List<TaskDTO> taskDTOs = tasks.stream()
+                .map(taskMapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(taskDTOs);
     }
 
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("task", new Task());
-        model.addAttribute("statuses", TaskStatus.values());
-        model.addAttribute("priorities", TaskPriority.values());
-        return "tasks/form";
-    }
-
-    @PostMapping("/save")
-    public String saveTask(@Valid @ModelAttribute("task") Task task, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("statuses", TaskStatus.values());
-            model.addAttribute("priorities", TaskPriority.values());
-            return "tasks/form";
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
+        Task task = taskService.findById(id).get();
+        if (task == null) {
+            return ResponseEntity.notFound().build();
         }
-        taskService.save(task);
-        return "redirect:/tasks";
+        return ResponseEntity.ok(taskMapper.toDTO(task));
     }
 
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Task task = taskService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid task ID: " + id));
-        model.addAttribute("task", task);
-        model.addAttribute("statuses", TaskStatus.values());
-        model.addAttribute("priorities", TaskPriority.values());
-        return "tasks/form";
+    @PostMapping
+    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+        Task task = taskMapper.toEntity(taskDTO);
+        Task savedTask = taskService.save(task);
+        return ResponseEntity.ok(taskMapper.toDTO(savedTask));
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteTask(@PathVariable Long id) {
-        taskService.deleteById(id);
-        return "redirect:/tasks";
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+        Task taskToUpdate = taskMapper.toEntity(taskDTO);
+        taskToUpdate.setId(id);
+        Task updatedTask = taskService.save(taskToUpdate);
+        if (updatedTask == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(taskMapper.toDTO(updatedTask));
     }
 
-    @GetMapping("/view/{id}")
-    public String viewTask(@PathVariable Long id, Model model) {
-        Task task = taskService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid task ID: " + id));
-        model.addAttribute("task", task);
-        return "tasks/view";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        this.taskService.deleteById(id);
+        return ResponseEntity.noContent().build();
+
     }
 }
